@@ -23,7 +23,7 @@
                 $checkUser->execute([$login]);
                 if ($checkUser->rowCount() > 0) {
                     echo '<div class="alert alert-warning">Ce login est déjà utilisé.</div>';
-                } else {
+                } else if ($checkUser->rowCount() <= 0){
                 $date=date('Y-m-d');
                 $stmt=$pdo->prepare("INSERT INTO utilisateurs (login, password,nom,prenom,date_creation,role) VALUES (?, ?, ?, ?, 'client')");
                 $stmt->execute([$login, $pwd, $nom, $prenom,$date]);
@@ -36,9 +36,9 @@
             Login et password sont obligatoires ! 
             </div>
         <?php 
-            
             }
         }
+    }
         ?>
     <h4>Inscription</h4>
     <form method="post">

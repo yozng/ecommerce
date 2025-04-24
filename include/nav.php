@@ -14,7 +14,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-link" href="#">Accueil</a>
         <?php if (!$connecte) { ?>
           <a class="nav-link" href="acceuil.php">Acceuil</a>
           <a class="nav-link" href="inscription.php">Inscription</a>

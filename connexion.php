@@ -21,8 +21,7 @@
 
                 if($stmt->rowCount() >= 1){
 
-                    session_start();
-                    $_SESSION['utilisateur'] = $stmt->fetch();
+                    $_SESSION['utilisateurs'] = $stmt->fetch();
 
                     if($user['role'] === 'admin'){
                         header('Location: admin.php');

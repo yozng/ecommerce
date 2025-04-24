@@ -17,11 +17,11 @@
 
             if(!empty($nom) && !empty($description)){
                 require 'include/database.php';
-                $stmt=$pdo->prepare("INSERT INTO categories (nom, description) VALUES (?, ?)");
+                $stmt=$pdo->prepare("INSERT INTO categorie (nomcat, descriptioncat) VALUES (?, ?)");
                 $stmt->execute([$nom, $description]);
         ?>
                     <div class="alert alert-success" role="alert">
-                        La catégorie <?php echo $nom ?>ajoutée avec succès !
+                        La catégorie <?php echo $nom ?> est ajoutée avec succès !
                     </div>
             <?php 
             }else{
