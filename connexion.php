@@ -20,12 +20,12 @@
                 $stmt->execute([$login, $pwd]);
 
                 if($stmt->rowCount() >= 1){
-
-                    $_SESSION['utilisateurs'] = $stmt->fetch();
+                    $user = $stmt->fetch(); 
+                    $_SESSION['utilisateur'] = $user;
 
                     if($user['role'] === 'admin'){
                         header('Location: admin.php');
-                    } else {
+                    } else if($user['role'] === 'client'){
                         header('Location: client.php');
                     }
                 }else{

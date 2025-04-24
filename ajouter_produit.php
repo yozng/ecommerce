@@ -28,11 +28,12 @@
                 $stmt=$pdo->prepare("INSERT INTO produits (nomp, prix, id_categorie, description) VALUES (?, ?, ?, ?)");
                 $stmt->execute([$nom, $prix, $categorie, $description]);
                 if($stmt){
-                ?>
+                    header('Location: produits.php');
+                /*?>
                     <div class="alert alert-success" role="alert">
                         La produit <?php echo $nom ?> est ajoutée avec succès !
                     </div>
-            <?php 
+            <?php */
                 }else{
             ?>
                     <div class="alert alert-danger" role="alert">
