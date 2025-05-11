@@ -9,7 +9,6 @@
     </head>
     <body>
         <?php include 'include/nav.php' 
-        session_start();
         ?>
     <div class="container">
         <?php 
