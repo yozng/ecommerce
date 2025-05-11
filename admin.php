@@ -7,15 +7,17 @@
         <title>Admin</title>
     </head>
     <body>
-        <?php include 'include/nav.php' ?>
+        <?php include 'include/nav.php' 
+        session_start();
+        ?>
     <div class="container">
         <?php 
-        if(!isset($_SESSION['utilisateurs'])|| $_SESSION['utilisateurs']['role'] !== 'admin') {
+        if(!isset($_SESSION['utilisateur'])|| $_SESSION['utilisateur']['role'] !== 'admin') {
             header('Location: connexion.php');
             exit;
         }
         ?>
-        <h4> Bienvenue Admin <?php echo $_SESSION['utilisateurs']['prenom'] ?></h4>
+        <h4> Bienvenue Admin <?php echo $_SESSION['utilisateur']['prenom'] ?></h4>
     </div>
     </body>
     </html>
