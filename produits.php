@@ -44,8 +44,9 @@
                         <td><?php echo $produit['promo'] ?> %</td>
                         <td><?php echo $produit['date_creationp'] ?></td>
                         <td>
-                            <input type="button" class="btn btn-primary btn-sm" value="Modifier" >
-                            <input type="button" class="btn btn-danger btn-sm" value="Supprimer" >
+                            <a href="modifier_produit.php?id=<?php echo $produit['id_produit'] ?>" class="btn btn-primary btn-sm">Modifier</a>
+                            <a href="supprimer_produit.php?id=<?php echo $produit['id_produit'] ?>" class="btn btn-danger btn-sm" 
+                            onclick="return confirm('Voulez-vous vraiment supprimer la categorie <?php echo $produit['nomp'] ?>');" >Supprimer</a>
                 <?php } ?>
             </tbody>
         </table>

@@ -19,14 +19,14 @@
             if (!empty($nom) && !empty($prenom) && !empty($login) && !empty($password)) {
                 require 'include/database.php';
 
-                $checkUser = $pdo->prepare("SELECT * FROM utilisateur WHERE login = ?");
+                $checkUser = $pdo->prepare("SELECT * FROM utilisateurs WHERE login = ?");
                 $checkUser->execute([$login]);
                 if ($checkUser->rowCount() > 0) {
                     echo '<div class="alert alert-warning">Ce login est déjà utilisé.</div>';
                 } else if ($checkUser->rowCount() <= 0){
-                $date=date('Y-m-d');
-                $stmt=$pdo->prepare("INSERT INTO utilisateurs (login, password,nom,prenom,date_creation,role) VALUES (?, ?, ?, ?, 'client')");
-                $stmt->execute([$login, $pwd, $nom, $prenom,$date]);
+                $date=date('Y-m-d H:i:s');
+                $stmt=$pdo->prepare("INSERT INTO utilisateurs (login, password,nom,prenom,date_creation,role) VALUES (?, ?, ?, ?,?, 'client')");
+                $stmt->execute([$login, $password, $nom, $prenom,$date]);
                 echo '<div class="alert alert-success">Inscription réussie. Vous pouvez vous connecter.</div>';
 
                 header('Location: connexion.php');

@@ -42,7 +42,7 @@
         <input type="text" class="form-control" name="nom" required value="<?php echo $cat['nomcat'] ?>">
 
         <label class="form-label">Description</label>
-        <textarea name="description" class="form-control" ><?php echo $cat['description'] ?></textarea>
+        <textarea name="description" class="form-control" ><?php echo $cat['descriptioncat'] ?></textarea>
 
         <input type="submit" name="modifier-cat" value="Modifier catégorie" class="btn btn-success my-2">
 

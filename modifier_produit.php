@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <title>Ajouter produit</title>
+    <title>Modifier produit</title>
 </head>
 <body>
     <?php 
-    include 'include/database.php';
+    require 'include/database.php';
     include 'include/nav.php' ?>
     <div class="container">
-        <h4>Ajouter un produit</h4>
+        <h4>Modifier un produit</h4>
         <?php
-        require 'include/database.php';
+        $id = $_GET['id'];
+        $stmt=$pdo->prepare("SELECT * FROM produits WHERE id_produit=?");
+        $stmt->execute([$id]);
+        $produit = $stmt->fetch(PDO::FETCH_ASSOC);
        if(isset($_POST['ajouter_produit'])){
             $nom = $_POST['nom'];
             $prix = $_POST['prix'];
@@ -21,8 +24,6 @@
             $categorie = $_POST['categorie'];
             $description = $_POST['description'];
             $date = date('Y-m-d H:i:s');  
-
-            //echo "$nom et $prix et $promotion et $categorie $description $date";
 
             if(!empty($nom) && !empty($prix) && !empty($categorie)){ 
                 $stmt=$pdo->prepare("INSERT INTO produits (nomp, prix, id_categorie, description) VALUES (?, ?, ?, ?)");
@@ -53,13 +54,13 @@
             ?>
     <form method="post">
         <label class="form-label">Nom</label>
-        <input type="text" class="form-control" name="nom" required>
+        <input type="text" class="form-control" name="nom" value="<?php echo $produit['nomp'] ?>" >
 
         <label class="form-label">Prix</label>
-        <input type="number" class="form-control" step="0.1" name="prix" min='0' required>
+        <input type="number" class="form-control" step="0.1" name="prix" min='0' value="<?php echo $produit['prix'] ?>" required>
 
         <label class="form-label">Promotion</label>
-        <input type="range" class="form-control" name="promotion" value='0' min='0' max='90' required>
+        <input type="range" class="form-control" name="promotion" value='0' min='0' max='90' value="<?php echo $produit['promo'] ?>" required>
 
         <?php
         $stmt = $pdo->query("SELECT * FROM categorie");
