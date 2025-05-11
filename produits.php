@@ -46,7 +46,7 @@
                         <td>
                             <a href="modifier_produit.php?id=<?php echo $produit['id_produit'] ?>" class="btn btn-primary btn-sm">Modifier</a>
                             <a href="supprimer_produit.php?id=<?php echo $produit['id_produit'] ?>" class="btn btn-danger btn-sm" 
-                            onclick="return confirm('Voulez-vous vraiment supprimer la categorie <?php echo $produit['nomp'] ?>');" >Supprimer</a>
+                            onclick="return confirm('Voulez-vous vraiment supprimer le produit <?php echo $produit['nomp'] ?>');" >Supprimer</a>
                 <?php } ?>
             </tbody>
         </table>

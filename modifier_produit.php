@@ -17,18 +17,17 @@
         $stmt=$pdo->prepare("SELECT * FROM produits WHERE id_produit=?");
         $stmt->execute([$id]);
         $produit = $stmt->fetch(PDO::FETCH_ASSOC);
-       if(isset($_POST['ajouter_produit'])){
+       if(isset($_POST['modifier_produit'])){
             $nom = $_POST['nom'];
             $prix = $_POST['prix'];
             $promotion = $_POST['promotion'];
             $categorie = $_POST['categorie'];
             $description = $_POST['description'];
-            $date = date('Y-m-d H:i:s');  
 
             if(!empty($nom) && !empty($prix) && !empty($categorie)){ 
-                $stmt=$pdo->prepare("INSERT INTO produits (nomp, prix, id_categorie, description) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$nom, $prix, $categorie, $description]);
-                if($stmt){
+                $stmt=$pdo->prepare("UPDATE produits SET nomp=?, prix=?, promo=?, id_categorie=?, description=? WHERE id_produit=?");
+                $upd=$stmt->execute([$nom, $prix, $promotion, $categorie, $description, $produit['id_produit']]);
+                if($upd){
                     header('Location: produits.php');
                 /*?>
                     <div class="alert alert-success" role="alert">
@@ -53,6 +52,8 @@
     }
             ?>
     <form method="post">
+        <input type="hidden" class="form-control" name="id" required value="<?php echo $produit['id_produit'] ?>" readonly>
+    
         <label class="form-label">Nom</label>
         <input type="text" class="form-control" name="nom" value="<?php echo $produit['nomp'] ?>" >
 
@@ -71,14 +72,18 @@
         <select name="categorie" class="form-select" required>
             <option value="">Sélectionner une catégorie</option>
             <?php foreach ($categories as $categorie) {
-                echo "<option value='".$categorie['id_categorie']."'>".$categorie['nomcat']."</option>";
+                if($categorie['id_categorie'] == $produit['id_categorie']){
+                    echo "<option value='".$categorie['id_categorie']."' selected>".$categorie['nomcat']."</option>";
+                }else{
+                    echo "<option value='".$categorie['id_categorie']."'>".$categorie['nomcat']."</option>";
+                }
                }   ?>
         </select>
 
         <label class="form-label">Description</label>
         <textarea name="description" class="form-control" ></textarea>
 
-        <input type="submit" name="ajouter_produit" value="Ajouter produit" class="btn btn-success my-2">
+        <input type="submit" name="modifier_produit" value="Modifier produit" class="btn btn-success my-2">
 
     </form>
     </div>
