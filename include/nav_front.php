@@ -6,7 +6,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-          <a class="nav-link" href="index.php">Liste des categories</a>
+          <a class="nav-link" href="client.php">Liste des categories</a>
           <a class="nav-link" href="connexion.php">Connexion</a>
     </div>
     </div>
