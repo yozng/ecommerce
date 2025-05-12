@@ -36,7 +36,14 @@
                 </p>
              </div>
             </div>
-            <?php } ?>
+            <?php } 
+            if (empty($produit)) {
+                ?><div class="alert alert-info" role="alert">
+                    Aucun produit trouvé dans cette catégorie ! 
+                  </div>
+                 <?php
+            }
+            ?>
         </div>
     </div>
     </div>

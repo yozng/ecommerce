@@ -10,8 +10,8 @@
     $accueil = 'acceuil.php';
   } else if ($role === 'admin') {
     $accueil = 'admin.php';
-  } else {
-    $accueil = 'client.php';
+  } else if ($role === 'client'){
+    $accueil = 'front/client.php';
 }
 ?>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -37,6 +37,7 @@
           <a class="nav-link" href="#">Modifier Clients</a>
           <a class="nav-link" href="deconnexion.php">Déconnexion</a>
         <?php } else if ($role === 'client'){ ?>
+          <a class="nav-link" href="categorie.php">Liste des catégories</a>
           <a class="nav-link" href="deconnexion.php">Déconnexion</a>
         <?php } ?>
     </div>

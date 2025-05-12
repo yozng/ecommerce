@@ -22,11 +22,16 @@
             $description = $_POST['description'];
             $date = date('Y-m-d H:i:s');  
 
-            //echo "$nom et $prix et $promotion et $categorie $description $date";
+            $image_name="";
+            if(isset($_FILES['image'])){
+                $image = $_FILES['image'];
+                $image_name = uniqid().$image;
+                move_uploaded_file($image['tmp_name'], "upload/produit/".$image_name);
+            }
 
             if(!empty($nom) && !empty($prix) && !empty($categorie)){ 
-                $stmt=$pdo->prepare("INSERT INTO produits (nomp, prix, id_categorie, description) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$nom, $prix, $categorie, $description]);
+                $stmt = $pdo->prepare("INSERT INTO produits (nomp, prix, id_categorie,promo, description, image, date_creationp) VALUES (?,?,?,?,?,?,?)");
+                $stmt->execute([$nom, $prix, $categorie, $promotion, $description, $image_name, $date]);
                 if($stmt){
                     header('Location: produits.php');
                 /*?>
@@ -51,7 +56,7 @@
                 }
     }
             ?>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <label class="form-label">Nom</label>
         <input type="text" class="form-control" name="nom" required>
 
@@ -65,6 +70,9 @@
         $stmt = $pdo->query("SELECT * FROM categorie");
         $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         ?>
+        
+        <label class="form-label">Image</label>
+        <input type="file" class="form-control" name="image" required>
 
         <label class="form-label">Catégorie</label>
         <select name="categorie" class="form-select" required>
@@ -76,6 +84,8 @@
 
         <label class="form-label">Description</label>
         <textarea name="description" class="form-control" ></textarea>
+
+
 
         <input type="submit" name="ajouter_produit" value="Ajouter produit" class="btn btn-success my-2">
 
