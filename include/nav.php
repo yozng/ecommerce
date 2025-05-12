@@ -32,8 +32,8 @@
      <!--     <a class="nav-link" href="ajouter_categorie">Ajouter catégorie</a> -->
           <a class="nav-link" href="ajouter_produit">Ajouter produit</a>
 
-          <a class="nav-link" href="#">Supprimer produit</a>
-          <a class="nav-link" href="#">Modifier produit</a>
+          <a class="nav-link" href="supprimer_produit">Supprimer produit</a>
+          <a class="nav-link" href="supprimer_categorie">Modifier produit</a>
           <a class="nav-link" href="#">Modifier Clients</a>
           <a class="nav-link" href="deconnexion.php">Déconnexion</a>
         <?php } else if ($role === 'client'){ ?>
