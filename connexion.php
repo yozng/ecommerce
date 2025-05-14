@@ -13,7 +13,7 @@ if(isset($_POST['connexion'])){
                 header('Location: admin.php');
                 exit;
             } else if($_SESSION['utilisateur']['role'] === 'client'){
-                header('Location: client.php');
+                header('Location: front/client.php');
                 exit;
             }else{
                 echo '<div class="alert alert-danger" role="alert">Login ou password sont incorrectes ! </div>';
