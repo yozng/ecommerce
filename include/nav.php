@@ -26,9 +26,9 @@ $accueil = $connecte ? ($role === 'admin' ? 'admin.php' : 'front/client.php') : 
           <li class="nav-item"><a class="nav-link" href="inscription.php">Inscription</a></li>
           <li class="nav-item"><a class="nav-link" href="connexion.php">Connexion</a></li>
         <?php } elseif ($role === 'admin') { ?>
-          <li class="nav-item"><a class="nav-link" href="categories">Les catégories</a></li>
-          <li class="nav-item"><a class="nav-link" href="produits">Les produits</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Les Clients</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.php">Les catégories</a></li>
+          <li class="nav-item"><a class="nav-link" href="produits.php">Les produits</a></li>
+          <li class="nav-item"><a class="nav-link" href="clients.php">Les Clients</a></li>
           <li class="nav-item"><a class="nav-link" href="deconnexion.php" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">Déconnexion</a></li>
         <?php } elseif ($role === 'client') { ?>
           <li class="nav-item"><a class="nav-link" href="categorie.php">Liste des catégories</a></li>
