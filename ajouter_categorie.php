@@ -1,3 +1,10 @@
+<?php
+include 'include/nav.php';
+if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'admin') {
+    header('Location: connexion.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,30 +14,28 @@
     <title>Ajouter catégorie</title>
 </head>
 <body>
-    <?php include 'include/nav.php' ?>
     <div class="container">
         <h4>Ajouter une catégorie</h4>
         <?php
        if(isset($_POST['ajouter_cat'])){
             $nom = $_POST['nom'];
             $description = $_POST['description'];
+            $icone = $_POST['icone'];
 
-            if(!empty($nom) && !empty($description)){
+
+            if(!empty($nom) && !empty($description) && !empty($icone)){
                 require 'include/database.php';
-                $stmt=$pdo->prepare("INSERT INTO categorie (nomcat, descriptioncat) VALUES (?, ?)");
-                $stmt->execute([$nom, $description]);
+                $stmt=$pdo->prepare("INSERT INTO categorie (nomcat, descriptioncat,icone) VALUES (?,?,?)");
+                $stmt->execute([$nom, $description,$icone]);
                 header('Location: categories.php');
+                exit;
                 /*?>
                     <div class="alert alert-success" role="alert">
                         La catégorie <?php echo $nom ?> est ajoutée avec succès !
                     </div>
             <?php */
             }else{
-            ?>
-                    <div class="alert alert-danger" role="alert">
-                    Nom et description sont obligatoires ! 
-                    </div>
-                <?php 
+                echo '<div class="alert alert-danger">Tous les champs sont obligatoires !</div>';
             }
         }
         ?>
@@ -40,6 +45,9 @@
 
         <label class="form-label">Description</label>
         <textarea name="description" class="form-control" ></textarea>
+
+        <label class="form-label">Icône </label>
+        <input type="text" class="form-control" name="icone" required>
 
         <input type="submit" name="ajouter_cat" value="Ajouter catégorie" class="btn btn-success my-2">
 

@@ -12,9 +12,19 @@
         <h4>Modifier catégorie</h4>
         <?php
         require 'include/database.php';
+        if (!isset($_GET['id'])) {
+            echo '<div class="alert alert-danger">ID invalide</div>';
+            exit;
+        }
+
         $stmt=$pdo->prepare("SELECT * FROM categorie WHERE id_categorie=?");
         $stmt->execute([$_GET['id']]);
         $cat = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$cat) {
+        echo '<div class="alert alert-danger">Catégorie introuvable</div>';
+        exit;
+        }
 
         if(isset($_POST['modifier-cat'])){
             $id = $_POST['id'];
@@ -26,16 +36,13 @@
                 $stmt->execute([$nom, $description, $id]);
                 header('Location: categories.php');
             }else{
-                ?>
-                    <div class="alert alert-danger" role="alert">
+                echo'<div class="alert alert-danger" role="alert">
                     Nom et description sont obligatoires ! 
-                    </div>
-                <?php 
+                    </div>';
             }
         }
         ?>
     <form method="post">
-       <!-- <label class="form-label">Id</label> -->
         <input type="hidden" class="form-control" name="id" required value="<?php echo $cat['id_categorie'] ?>" readonly>
     
         <label class="form-label">Nom</label>

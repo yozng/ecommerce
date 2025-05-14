@@ -1,3 +1,10 @@
+<?php
+include 'include/nav.php';
+if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'admin') {
+    header('Location: connexion.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +14,6 @@
     <title>Ajouter produit</title>
 </head>
 <body>
-    <?php 
-    include 'include/database.php';
-    include 'include/nav.php' ?>
     <div class="container">
         <h4>Ajouter un produit</h4>
         <?php
@@ -21,41 +25,37 @@
             $categorie = $_POST['categorie'];
             $description = $_POST['description'];
             $date = date('Y-m-d H:i:s');  
-
             $image_name="";
+
             if(isset($_FILES['image'])){
                 $image = $_FILES['image'];
-                $image_name = uniqid().$image;
-                move_uploaded_file($image['tmp_name'], "upload/produit/".$image_name);
+                $image_name = uniqid().$image['name'];
+                $upload_path = "upload/produit/" . $image_name;
+
+                if (!move_uploaded_file($image['tmp_name'], $upload_path)) {
+                    echo '<div class="alert alert-danger">Erreur lors de l\'upload de l\'image.</div>';
+                }
             }
 
-            if(!empty($nom) && !empty($prix) && !empty($categorie)){ 
+
+            if(!empty($nom) && !empty($prix) && !empty($categorie) && !empty($image_name)){ 
                 $stmt = $pdo->prepare("INSERT INTO produits (nomp, prix, id_categorie,promo, description, image, date_creationp) VALUES (?,?,?,?,?,?,?)");
                 $stmt->execute([$nom, $prix, $categorie, $promotion, $description, $image_name, $date]);
                 if($stmt){
                     header('Location: produits.php');
-                /*?>
-                    <div class="alert alert-success" role="alert">
-                        La produit <?php echo $nom ?> est ajoutée avec succès !
-                    </div>
-            <?php */
+                    exit;
                 }else{
-            ?>
-                    <div class="alert alert-danger" role="alert">
+                    echo ' <div class="alert alert-danger" role="alert">
                         Erreur base de données !!
-                    </div>
-            <?php 
+                    </div>';
                 }
             }else{
-            ?>
-                    <div class="alert alert-danger" role="alert">
-                        Nom, prix et catégorie sont obligatoires ! 
-                    </div>
-            <?php 
-                        
-                }
-    }
-            ?>
+                echo '<div class="alert alert-danger">Tous les champs obligatoires doivent être remplis.</div>';
+            }
+        }
+        $stmt1 = $pdo->query("SELECT * FROM categorie");
+        $categories = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+?>
     <form method="post" enctype="multipart/form-data">
         <label class="form-label">Nom</label>
         <input type="text" class="form-control" name="nom" required>
@@ -65,11 +65,6 @@
 
         <label class="form-label">Promotion</label>
         <input type="range" class="form-control" name="promotion" value='0' min='0' max='90' required>
-
-        <?php
-        $stmt = $pdo->query("SELECT * FROM categorie");
-        $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        ?>
         
         <label class="form-label">Image</label>
         <input type="file" class="form-control" name="image" required>

@@ -1,3 +1,13 @@
+<?php
+    include 'include/nav.php' ;
+    require 'include/database.php';
+    if(!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'admin') {
+        header('Location: connexion.php');
+        exit;
+    }
+    $produits = $pdo->query("SELECT produits.*,categorie.nomcat as 'nom_categorie' FROM produits INNER JOIN categorie ON produits.id_categorie = categorie.id_categorie")->fetchAll(PDO::FETCH_ASSOC);
+            
+         ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,19 +17,9 @@
     <title>Liste des produits</title>
 </head>
 <body>
-    <?php include 'include/nav.php' ?>
     <div class="container">
         <h2>Liste des produits</h2>
-        <a href="ajouter_categorie.php" class="btn btn-success">Ajouter une catégorie</a>
-        <?php
-            require 'include/database.php';
-            if(!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'admin') {
-                header('Location: connexion.php');
-                exit;
-            }
-            $produits = $pdo->query("SELECT produits.*,categorie.nomcat as 'nom_categorie' FROM produits INNER JOIN categorie ON produits.id_categorie = categorie.id_categorie")->fetchAll(PDO::FETCH_ASSOC);
-            
-         ?>
+        <a href="ajouter_produit.php" class="btn btn-success">Ajouter un produit</a>
          <table class="table table-striped table-hover">
             <thead>
                 <tr>
@@ -46,7 +46,7 @@
                         <td>
                             <a href="modifier_produit.php?id=<?php echo $produit['id_produit'] ?>" class="btn btn-primary btn-sm">Modifier</a>
                             <a href="supprimer_produit.php?id=<?php echo $produit['id_produit'] ?>" class="btn btn-danger btn-sm" 
-                            onclick="return confirm('Voulez-vous vraiment supprimer le produit <?php echo $produit['nomp'] ?>');" >Supprimer</a>
+                            onclick="return confirm('Voulez-vous vraiment supprimer le produit <?php echo $produit['nomp'] ?> ?');" >Supprimer</a>
                 <?php } ?>
             </tbody>
         </table>

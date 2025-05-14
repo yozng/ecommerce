@@ -1,3 +1,12 @@
+<?php
+include 'include/nav.php';
+if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'admin') {
+   header('Location: connexion.php');
+    exit;
+}
+require 'include/database.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +16,24 @@
     <title>Modifier produit</title>
 </head>
 <body>
-    <?php 
-    require 'include/database.php';
-    include 'include/nav.php' ?>
     <div class="container">
         <h4>Modifier un produit</h4>
         <?php
+         if (!isset($_GET['id'])) { 
+        echo '<div class="alert alert-danger">ID produit invalide</div>';
+        exit;
+    }
+
         $id = $_GET['id'];
         $stmt=$pdo->prepare("SELECT * FROM produits WHERE id_produit=?");
         $stmt->execute([$id]);
         $produit = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$produit) {
+        echo '<div class="alert alert-danger">Produit introuvable</div>';
+        exit;
+    }
+
        if(isset($_POST['modifier_produit'])){
             $nom = $_POST['nom'];
             $prix = $_POST['prix'];
@@ -29,25 +46,12 @@
                 $upd=$stmt->execute([$nom, $prix, $promotion, $categorie, $description, $produit['id_produit']]);
                 if($upd){
                     header('Location: produits.php');
-                /*?>
-                    <div class="alert alert-success" role="alert">
-                        La produit <?php echo $nom ?> est ajoutée avec succès !
-                    </div>
-            <?php */
+                    exit;
                 }else{
-            ?>
-                    <div class="alert alert-danger" role="alert">
-                        Erreur base de données !!
-                    </div>
-            <?php 
+                echo '<div class="alert alert-danger">Erreur base de données !</div>';
                 }
             }else{
-            ?>
-                    <div class="alert alert-danger" role="alert">
-                        Nom, prix et catégorie sont obligatoires ! 
-                    </div>
-            <?php 
-                        
+                echo '<div class="alert alert-danger">Nom, prix et catégorie sont obligatoires !</div>';
                 }
     }
             ?>
@@ -58,10 +62,10 @@
         <input type="text" class="form-control" name="nom" value="<?php echo $produit['nomp'] ?>" >
 
         <label class="form-label">Prix</label>
-        <input type="number" class="form-control" step="0.1" name="prix" min='0' value="<?php echo $produit['prix'] ?>" required>
+        <input type="number" class="form-control" step="0.1" name="prix" min='0' value="<?php echo $produit['prix'] ?>" >
 
         <label class="form-label">Promotion</label>
-        <input type="range" class="form-control" name="promotion" value='0' min='0' max='90' value="<?php echo $produit['promo'] ?>" required>
+        <input type="range" class="form-range" name="promotion" min="0" max="90" value="<?php echo $produit['promo']; ?>" required>
 
         <?php
         $stmt = $pdo->query("SELECT * FROM categorie");
