@@ -1,33 +1,22 @@
-<?php
+<?php 
+     require_once '../include/database.php';
+        $stmt = $pdo->prepare("SELECT * FROM categorie WHERE id_categorie = :id");
+        $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $categorie1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-require_once '../include/database.php';
-
-$categorie_id = $_GET['id'] ?? null;
-
-if (!$categorie_id) {
-    die("ID de catégorie invalide");
-}
-
-// Récupérer la catégorie (optionnel)
-$stmtCat = $pdo->prepare("SELECT * FROM categorie WHERE id_categorie = ?");
-$stmtCat->execute([$categorie_id]);
-$categorie = $stmtCat->fetch(PDO::FETCH_ASSOC);
-if (!$categorie) {
-    die("Catégorie non trouvée");
-}
-
-// Récupérer les produits de cette catégorie
-$stmt = $pdo->prepare("SELECT * FROM produits WHERE id_categorie = ?");
-$stmt->execute([$categorie_id]);
-$produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
+        $stmt = $pdo->prepare("SELECT * FROM produits WHERE id_categorie = :id");
+        $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $produit = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Produits de la catégorie <?= htmlspecialchars($categorie['nomcat']) ?></title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Categorie | <?php echo $categorie1['nomcat'] ?></title>
 </head>
 <body>
     <?php include '../include/nav_front.php' ?>
@@ -49,11 +38,19 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </p>
              </div>
             </div>
-          </div>
+            <?php } 
+            if (empty($produit)) {
+                ?><div class="alert alert-info" role="alert">
+                    Aucun produit trouvé dans cette catégorie ! 
+                  </div>
+                 <?php
+            }
+            ?>
         </div>
-      <?php endforeach; ?>
     </div>
-  <?php endif; ?>
+    </div>
+  </div>
 </div>
+    </div>
 </body>
 </html>
