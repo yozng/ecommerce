@@ -30,29 +30,24 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-<?php include '../include/nav_front.php'; ?>
-
-<div class="container py-4">
-  <h2>Produits dans la catégorie : <?= htmlspecialchars($categorie['nomcat']) ?></h2>
-
-  <?php if (empty($produits)): ?>
-    <p>Aucun produit dans cette catégorie.</p>
-  <?php else: ?>
-    <div class="row">
-      <?php foreach ($produits as $produit): ?>
-        <div class="col-md-4 mb-3">
-          <div class="card">
-            <!-- Image si tu en as -->
-            <!-- <img src="..." class="card-img-top" alt="<?= htmlspecialchars($produit['nomp']) ?>"> -->
+    <?php include '../include/nav_front.php' ?>
+    <div class="container py-2">
+    <h4><?php echo $categorie1['nomcat'] ?></h4>
+    <div class="container">
+        <div class="row">
+            <?php foreach ($produit as $produit1){ ?>
+            <div class="card mb-3 col-md-4 m-1">
+            <img src="../upload/produit/<?php echo $produit1['image'] ?>" class="card-img-top" alt="Card image cap" width="200" height="300">
             <div class="card-body">
-              <h5 class="card-title"><?= htmlspecialchars($produit['nomp']) ?></h5>
-              <p class="card-text"><?= number_format($produit['prix'], 2) ?> MAD</p>
-
-              <form action="../front/ajouter_panier.php" method="post">
-                <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
-                <input type="number" name="quantite" value="1" min="1" class="form-control mb-2" style="width: 80px;">
-                <button type="submit" class="btn btn-primary">Ajouter au panier</button>
-              </form>
+                <a href="produit.php?id=<?php echo $produit1['id_produit'] ?>" class="btn stretched-link">Afficher détails</a>
+                <h5 class="card-title"><?php echo $produit1['nomp'] ?></h5>
+                <p class="card-text"><?php echo $produit1['description'] ?></p>
+                <p class="card-text"><?php echo $produit1['prix'] ?> MAD</p>
+                <p class="card-text">
+                    <small class="text-body-secondary">Last updated : <?php echo date_format(date_create($produit1['date_creationp']), 'Y/m/d'); ?>
+                    </small>
+                </p>
+             </div>
             </div>
           </div>
         </div>

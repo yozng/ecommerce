@@ -28,6 +28,7 @@
                     <th scope="col">Description</th>
                     <th scope="col">Prix</th>
                     <th scope="col">Catégorie</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Promotion</th>
                     <th scope="col">Date</th>
                     <th scope="col">Operation</th>
@@ -41,6 +42,7 @@
                         <td><?php echo $produit['description'] ?></td>
                         <td><?php echo $produit['prix'] ?> MAD</td>
                         <td><?php echo $produit['nom_categorie'] ?></td>
+                        <td><img class="img-fluid" width="100" src="upload/produit/<?php echo $produit['image'] ?>" alt="<?php echo $produit['nomp'] ?>"></td>
                         <td><?php echo $produit['promo'] ?> %</td>
                         <td><?php echo $produit['date_creationp'] ?></td>
                         <td>
