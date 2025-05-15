@@ -25,17 +25,21 @@ if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'ad
             $categorie = $_POST['categorie'];
             $description = $_POST['description'];
             $date = date('Y-m-d H:i:s');  
-            $image_name="";
+            $image_name = "produit.png";
 
-            if(isset($_FILES['image'])){
+            if (!empty($_FILES['image']) && $_FILES['image']['error'] === 0) {
                 $image = $_FILES['image'];
-                $image_name = uniqid().$image['name'];
+                $image_name = uniqid() . "_" . ($image['name']);
                 $upload_path = "upload/produit/" . $image_name;
 
                 if (!move_uploaded_file($image['tmp_name'], $upload_path)) {
                     echo '<div class="alert alert-danger">Erreur lors de l\'upload de l\'image.</div>';
+                    $image_name = "pardefaut.png"; 
                 }
+            } else {
+                $image_name = "pardefaut.png";
             }
+
 
 
             if(!empty($nom) && !empty($prix) && !empty($categorie) && !empty($image_name)){ 
@@ -64,10 +68,10 @@ if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'ad
         <input type="number" class="form-control" step="0.1" name="prix" min='0' required>
 
         <label class="form-label">Promotion</label>
-        <input type="range" class="form-control" name="promotion" value='0' min='0' max='90' required>
+        <input type="range" class="form-control" name="promotion" value='0' min='0' max='90' >
         
         <label class="form-label">Image</label>
-        <input type="file" class="form-control" name="image" required>
+        <input type="file" class="form-control" name="image" >
 
         <label class="form-label">Catégorie</label>
         <select name="categorie" class="form-select" required>

@@ -40,6 +40,14 @@ require 'include/database.php';
             $promotion = $_POST['promotion'];
             $categorie = $_POST['categorie'];
             $description = $_POST['description'];
+            $image_name = "";
+
+            if (!empty($_FILES['image']) && $_FILES['image']['error'] === 0) {
+                $image = $_FILES['image'];
+                $image_name = uniqid() . "_" . ($image['name']);
+                $upload_path = "upload/produit/" . $image_name;
+                move_uploaded_file($image['tmp_name'], $upload_path)
+            }
 
             if(!empty($nom) && !empty($prix) && !empty($categorie)){ 
                 $stmt=$pdo->prepare("UPDATE produits SET nomp=?, prix=?, promo=?, id_categorie=?, description=? WHERE id_produit=?");
@@ -84,8 +92,12 @@ require 'include/database.php';
                }   ?>
         </select>
 
+        <label class="form-label">Image</label>
+        <input type="file" class="form-control" name="image" >
+        <img width="250" class="img img-fluid" src="upload/produit/<?php echo $produit['image']; ?>"><br>
+
         <label class="form-label">Description</label>
-        <textarea name="description" class="form-control" ></textarea>
+        <textarea name="description" class="form-control" ><?php echo $produit['description']; ?></textarea>
 
         <input type="submit" name="modifier_produit" value="Modifier produit" class="btn btn-success my-2">
 

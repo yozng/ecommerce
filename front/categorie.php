@@ -26,7 +26,7 @@
         <div class="row">
             <?php foreach ($produit as $produit1){ ?>
             <div class="card mb-3 col-md-4">
-            <img src="..." class="card-img-top" alt="..." width="200" height="300">
+            <img src="../upload/produit/<?php echo $produit1['image'] ?>" class="card-img-top" alt="Card image cap" width="200" height="300">
             <div class="card-body">
                 <h5 class="card-title"><?php echo $produit1['nomp'] ?></h5>
                 <p class="card-text"><?php echo $produit1['description'] ?></p>
