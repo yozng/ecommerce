@@ -46,12 +46,18 @@ require 'include/database.php';
                 $image = $_FILES['image'];
                 $image_name = uniqid() . "_" . ($image['name']);
                 $upload_path = "upload/produit/" . $image_name;
-                move_uploaded_file($image['tmp_name'], $upload_path)
+                move_uploaded_file($image['tmp_name'], $upload_path);
             }
+            if (!empty($nom) && !empty($prix) && !empty($categorie)) {
 
-            if(!empty($nom) && !empty($prix) && !empty($categorie)){ 
+            if (!empty($image_name)) {
+                $stmt=$pdo->prepare("UPDATE produits SET nomp=?, prix=?, promo=?, id_categorie=?, description=?,image=? WHERE id_produit=?");
+                $upd = $stmt->execute([$nom, $prix, $promotion, $categorie, $description, $image_name, $produit['id_produit']]);
+            } else {
                 $stmt=$pdo->prepare("UPDATE produits SET nomp=?, prix=?, promo=?, id_categorie=?, description=? WHERE id_produit=?");
                 $upd=$stmt->execute([$nom, $prix, $promotion, $categorie, $description, $produit['id_produit']]);
+            }
+
                 if($upd){
                     header('Location: produits.php');
                     exit;
@@ -63,7 +69,7 @@ require 'include/database.php';
                 }
     }
             ?>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" class="form-control" name="id" required value="<?php echo $produit['id_produit'] ?>" readonly>
     
         <label class="form-label">Nom</label>

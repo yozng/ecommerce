@@ -25,11 +25,13 @@
     <div class="container">
         <div class="row">
             <?php foreach ($produit as $produit1){ ?>
-            <div class="card mb-3 col-md-4">
+            <div class="card mb-3 col-md-4 m-1">
             <img src="../upload/produit/<?php echo $produit1['image'] ?>" class="card-img-top" alt="Card image cap" width="200" height="300">
             <div class="card-body">
+                <a href="produit.php?id=<?php echo $produit1['id_produit'] ?>" class="btn stretched-link">Afficher détails</a>
                 <h5 class="card-title"><?php echo $produit1['nomp'] ?></h5>
                 <p class="card-text"><?php echo $produit1['description'] ?></p>
+                <p class="card-text"><?php echo $produit1['prix'] ?> MAD</p>
                 <p class="card-text">
                     <small class="text-body-secondary">Last updated : <?php echo date_format(date_create($produit1['date_creationp']), 'Y/m/d'); ?>
                     </small>
