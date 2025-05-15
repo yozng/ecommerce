@@ -1,54 +1,64 @@
-<?php 
-     require_once '../include/database.php';
-        $stmt = $pdo->prepare("SELECT * FROM categorie WHERE id_categorie = :id");
-        $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $categorie1 = $stmt->fetch(PDO::FETCH_ASSOC);
+<?php
 
-        $stmt = $pdo->prepare("SELECT * FROM produits WHERE id_categorie = :id");
-        $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $produit = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    ?>
+require_once '../include/database.php';
+
+$categorie_id = $_GET['id'] ?? null;
+
+if (!$categorie_id) {
+    die("ID de catégorie invalide");
+}
+
+// Récupérer la catégorie (optionnel)
+$stmtCat = $pdo->prepare("SELECT * FROM categorie WHERE id_categorie = ?");
+$stmtCat->execute([$categorie_id]);
+$categorie = $stmtCat->fetch(PDO::FETCH_ASSOC);
+if (!$categorie) {
+    die("Catégorie non trouvée");
+}
+
+// Récupérer les produits de cette catégorie
+$stmt = $pdo->prepare("SELECT * FROM produits WHERE id_categorie = ?");
+$stmt->execute([$categorie_id]);
+$produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <title>Categorie | <?php echo $categorie1['nomcat'] ?></title>
+  <meta charset="UTF-8" />
+  <title>Produits de la catégorie <?= htmlspecialchars($categorie['nomcat']) ?></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <?php include '../include/nav_front.php' ?>
-    <div class="container py-2">
-    <h4><?php echo $categorie1['nomcat'] ?></h4>
-    <div class="container">
-        <div class="row">
-            <?php foreach ($produit as $produit1){ ?>
-            <div class="card mb-3 col-md-4">
-            <img src="../upload/produit/<?php echo $produit1['image'] ?>" class="card-img-top" alt="Card image cap" width="200" height="300">
+<?php include '../include/nav_front.php'; ?>
+
+<div class="container py-4">
+  <h2>Produits dans la catégorie : <?= htmlspecialchars($categorie['nomcat']) ?></h2>
+
+  <?php if (empty($produits)): ?>
+    <p>Aucun produit dans cette catégorie.</p>
+  <?php else: ?>
+    <div class="row">
+      <?php foreach ($produits as $produit): ?>
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <!-- Image si tu en as -->
+            <!-- <img src="..." class="card-img-top" alt="<?= htmlspecialchars($produit['nomp']) ?>"> -->
             <div class="card-body">
-                <h5 class="card-title"><?php echo $produit1['nomp'] ?></h5>
-                <p class="card-text"><?php echo $produit1['description'] ?></p>
-                <p class="card-text">
-                    <small class="text-body-secondary">Last updated : <?php echo date_format(date_create($produit1['date_creationp']), 'Y/m/d'); ?>
-                    </small>
-                </p>
-             </div>
+              <h5 class="card-title"><?= htmlspecialchars($produit['nomp']) ?></h5>
+              <p class="card-text"><?= number_format($produit['prix'], 2) ?> MAD</p>
+
+              <form action="../front/ajouter_panier.php" method="post">
+                <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+                <input type="number" name="quantite" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+              </form>
             </div>
-            <?php } 
-            if (empty($produit)) {
-                ?><div class="alert alert-info" role="alert">
-                    Aucun produit trouvé dans cette catégorie ! 
-                  </div>
-                 <?php
-            }
-            ?>
+          </div>
         </div>
+      <?php endforeach; ?>
     </div>
-    </div>
-  </div>
+  <?php endif; ?>
 </div>
-    </div>
 </body>
 </html>
