@@ -41,6 +41,7 @@ if (!empty($panier)) {
                     <th scope="col">Quantité</th>
                     <th scope="col">Prix Unitaire</th>
                     <th scope="col">Total</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,9 +54,16 @@ if (!empty($panier)) {
                 ?>
                     <tr>
                         <td><?php echo $produit['nomp']; ?></td>
-                        <td><?php echo $quantite; ?></td>
+                        <td>
+                            <a href="modifier_panier.php?id=<?php echo $produit['id_produit']; ?>&quantite=<?php echo $quantite - 1; ?>" class="btn btn-sm btn-warning">-</a>
+                                <?php echo $quantite; ?>
+                            <a href="modifier_panier.php?id=<?php echo $produit['id_produit']; ?>&quantite=<?php echo $quantite + 1; ?>" class="btn btn-sm btn-warning">+</a>
+                        </td>
                         <td><?php echo $produit['prix']; ?> MAD</td>
                         <td><?php echo $totalProduit; ?> MAD</td>
+                        <td>
+                            <a href="supprimer_panier.php?id=<?php echo $produit['id_produit']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?');">Supprimer</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -66,6 +74,10 @@ if (!empty($panier)) {
                 </tr>
             </tfoot>
         </table>
+        <form method="post" action="valider_commande.php">
+                <input type="hidden" name="total" value="<?php echo $totalGeneral; ?>">
+                <button type="submit" class="btn btn-success">Valider la commande</button>
+        </form>
     <?php endif; ?>
 </div>
 </body>
