@@ -9,7 +9,7 @@
         $button = '<i class="fa-solid fa-pencil"></i>';
     }
     ?>
-    <?php if ($idUtilisateur !== 0): ?>
+    <?php if ($idUtilisateur !== 0){ ?>
         <form method="post" class="counter d-flex" action="ajouter_panier.php">
             <button onclick="return false;" class="btn btn-primary mx-2 counter-moins">-</button>
             <input type="hidden" name="id" value="<?php echo $idProduit ?>">
@@ -30,9 +30,9 @@
             }
             ?>
         </form>
-    <?php else: ?>
+    <?php }else {?>
         <div class="alert alert-warning" role="alert">
             Vous devez être connecté pour acheter ce produit <strong><a href="../connexion.php">Connexion</a></strong>
         </div>
-    <?php endif; ?>
+    <?php } ?>
 </div>

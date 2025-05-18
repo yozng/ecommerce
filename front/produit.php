@@ -1,9 +1,11 @@
 <?php 
-require_once '../include/database.php';
+require '../include/database.php';
+
 $stmt = $pdo->prepare("SELECT * FROM produits WHERE id_produit = :id");
 $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
 $stmt->execute();
 $produits = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>

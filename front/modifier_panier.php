@@ -1,7 +1,7 @@
 <?php
 //session_start();
 $idProduit = $_GET['id'] ?? 0;
-$idUtilisateur = $_SESSION['utilisateur']['id'] ?? 0;
+$idUtilisateur = $_SESSION['utilisateur']['id_user'] ?? 0;
 
 if (!isset($_SESSION['panier'][$idUtilisateur][$idProduit])) {
     die("Produit non trouvé dans le panier.");
