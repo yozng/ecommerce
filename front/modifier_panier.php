@@ -1,5 +1,4 @@
 <?php
-//session_start();
 $idProduit = $_GET['id'] ?? 0;
 $idUtilisateur = $_SESSION['utilisateur']['id_user'] ?? 0;
 

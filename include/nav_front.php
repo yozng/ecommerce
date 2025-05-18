@@ -1,5 +1,7 @@
 <?php
-//session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $connecte = isset($_SESSION['utilisateur']) && $_SESSION['utilisateur']['role'] === 'client';
 
@@ -7,7 +9,6 @@ $productCount = 0;
 if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
     $idUtilisateur = $_SESSION['utilisateur']['id_user'] ?? 0;
     if (isset($_SESSION['panier'][$idUtilisateur]) && is_array($_SESSION['panier'][$idUtilisateur])) {
-        // Calculez le nombre total de produits dans le panier
         $productCount = array_sum($_SESSION['panier'][$idUtilisateur]);
     }
 }

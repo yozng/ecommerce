@@ -1,5 +1,4 @@
 <?php 
-session_start();
      require_once '../include/database.php';
      $idUtilisateur = isset($_SESSION['utilisateur']) ? $_SESSION['utilisateur']['id_user'] : 0;
     

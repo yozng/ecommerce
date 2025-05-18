@@ -30,11 +30,11 @@ if (!empty($panier)) {
     <div class="mb-3">
         <a href="client.php" class="btn btn-outline-primary">← Retour à la liste des produits</a>
     </div>
-
+    
     <?php if (empty($produits)): ?>
         <div class="alert alert-warning">Votre panier est vide.</div>
     <?php else: ?>
-        <table class="table table-striped">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Produit</th>
@@ -66,11 +66,6 @@ if (!empty($panier)) {
                 </tr>
             </tfoot>
         </table>
-        <div class="text-end">
-            <a href="commander.php" class="btn btn-success">
-                🧾 Valider la commande
-            </a>
-        </div>
     <?php endif; ?>
 </div>
 </body>
