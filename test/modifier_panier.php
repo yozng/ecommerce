@@ -1,4 +1,7 @@
 <?php
+session_start();
+require '../include/database.php';
+
 $idProduit = $_GET['id'] ?? 0;
 $idUtilisateur = $_SESSION['utilisateur']['id_user'] ?? 0;
 
@@ -14,17 +17,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier Quantité</title>
-</head>
-<body>
-    <form method="post">
-        <label>Nouvelle quantité :</label>
-        <input type="number" name="quantite" value="<?= $_SESSION['panier'][$idUtilisateur][$idProduit] ?>" min="1">
-        <button type="submit">Mettre à jour</button>
-    </form>
-</body>
-</html>
