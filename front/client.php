@@ -57,6 +57,9 @@ function calculerRemise($prix, $promo) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
     <title>Liste des catégories et produits</title>
+    <style>
+
+  </style>
 </head>
 <body>
 <?php include '../include/nav_front.php'; ?>
@@ -173,4 +176,4 @@ function calculerRemise($prix, $promo) {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
-</html>
+</html>  
