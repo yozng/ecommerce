@@ -52,6 +52,5 @@ $categories = $pdo->query("SELECT * FROM categorie")->fetchAll(PDO::FETCH_ASSOC)
         </table>
     </div>
 
-    <?php include 'include/footer.php'; ?>
 </body>
 </html>
