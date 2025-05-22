@@ -20,13 +20,12 @@ if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'ad
        if(isset($_POST['ajouter_cat'])){
             $nom = $_POST['nom'];
             $description = $_POST['description'];
-            $icone = $_POST['icone'];
 
 
-            if(!empty($nom) && !empty($description) && !empty($icone)){
+            if(!empty($nom) && !empty($description)){
                 require 'include/database.php';
-                $stmt=$pdo->prepare("INSERT INTO categorie (nomcat, descriptioncat,icone) VALUES (?,?,?)");
-                $stmt->execute([$nom, $description,$icone]);
+                $stmt=$pdo->prepare("INSERT INTO categorie (nomcat, descriptioncat) VALUES (?,?)");
+                $stmt->execute([$nom, $description]);
                 header('Location: categories.php');
                 exit;
                 /*?>
@@ -45,9 +44,6 @@ if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'ad
 
         <label class="form-label">Description</label>
         <textarea name="description" class="form-control" ></textarea>
-
-        <label class="form-label">Icône </label>
-        <input type="text" class="form-control" name="icone" required>
 
         <input type="submit" name="ajouter_cat" value="Ajouter catégorie" class="btn btn-success my-2">
 

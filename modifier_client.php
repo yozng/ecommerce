@@ -52,4 +52,3 @@ include 'include/nav.php';
   </form>
 </div>
 
-<?php include 'include/footer.php'; ?>
