@@ -132,23 +132,23 @@ if (!$utilisateur) {
     <tbody>
       <tr>
         <th>Login</th>
-        <td><?= htmlspecialchars($utilisateur['login']) ?></td>
+        <td><?= $utilisateur['login'] ?></td>
       </tr>
       <tr>
         <th>Nom</th>
-        <td><?= htmlspecialchars($utilisateur['nom']) ?></td>
+        <td><?= $utilisateur['nom'] ?></td>
       </tr>
       <tr>
         <th>Prénom</th>
-        <td><?= htmlspecialchars($utilisateur['prenom']) ?></td>
+        <td><?= $utilisateur['prenom']?></td>
       </tr>
       <tr>
         <th>Date de création</th>
-        <td><?= htmlspecialchars($utilisateur['date_creation']) ?></td>
+        <td><?= $utilisateur['date_creation'] ?></td>
       </tr>
       <tr>
         <th>Rôle</th>
-        <td><?= htmlspecialchars($utilisateur['role']) ?></td>
+        <td><?= $utilisateur['role'] ?></td>
       </tr>
     </tbody>
   </table>
