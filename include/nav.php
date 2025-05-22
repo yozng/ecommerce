@@ -14,6 +14,7 @@ $accueil = $connecte ? ($role === 'admin' ? 'admin.php' : 'front/client.php') : 
   <title>Jeux de Société</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -29,10 +30,17 @@ $accueil = $connecte ? ($role === 'admin' ? 'admin.php' : 'front/client.php') : 
           <li class="nav-item"><a class="nav-link" href="inscription.php">Inscription</a></li>
           <li class="nav-item"><a class="nav-link" href="connexion.php">Connexion</a></li>
         <?php } elseif ($role === 'admin') { ?>
+      
           <li class="nav-item"><a class="nav-link" href="categories.php">Les catégories</a></li>
           <li class="nav-item"><a class="nav-link" href="produits.php">Les produits</a></li>
           <li class="nav-item"><a class="nav-link" href="clients.php">Les Clients</a></li>
           <li class="nav-item"><a class="nav-link" href="deconnexion.php" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">Déconnexion</a></li>
+          <li class="nav-item">
+          <a class="nav-link" href="profil_admin.php" title="Profil Admin">
+          <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+          </a>
+          </li>
+          
         <?php } elseif ($role === 'client') { ?>
           <li class="nav-item"><a class="nav-link" href="categorie.php">Liste des catégories</a></li>
           <li class="nav-item"><a class="nav-link" href="deconnexion.php" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">Déconnexion</a></li>
