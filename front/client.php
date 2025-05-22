@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require_once '../include/database.php';
 
@@ -6,21 +6,31 @@ require_once '../include/database.php';
 $stmt = $pdo->query("SELECT * FROM categorie");
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Tri par prix
+// Récupération des filtres
+$categorieId = isset($_GET['categorie_id']) ? (int)$_GET['categorie_id'] : 0;
 $order = '';
 if (isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC'])) {
     $order = strtoupper($_GET['order']);
 }
 
-// Produits
-if ($order === '') {
-    $stmt = $pdo->query("SELECT * FROM produits");
-} else {
-    $stmt = $pdo->prepare("SELECT * FROM produits ORDER BY prix $order");
-    $stmt->execute();
+// Construction de la requête SQL
+$query = "SELECT * FROM produits";
+$params = [];
+
+if ($categorieId > 0) {
+    $query .= " WHERE id_categorie = ?";
+    $params[] = $categorieId;
 }
+
+if ($order !== '') {
+    $query .= " ORDER BY prix $order";
+}
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Fonction de calcul de remise
 function calculerRemise($prix, $promo) {
     return round($prix * (1 - $promo / 100), 2);
 }
@@ -31,12 +41,11 @@ function calculerRemise($prix, $promo) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <title>Produits & Catégories</title>
+    <title>Liste des catégories et produits</title>
 </head>
 <body>
-
 <?php include '../include/nav_front.php'; ?>
 
 <div style="text-align: center; margin-top: 40px; margin-bottom: 100px;">
@@ -44,86 +53,100 @@ function calculerRemise($prix, $promo) {
     <p style="font-size: 1.5rem; margin-top: 15px;">Votre boutique en ligne de jeux de société !</p>
 </div>
 
-<div class="container-fluid my-4">
-    <div style="display: flex; gap: 20px;">
+<div class="container py-4">
+    <h4><i class="fa-solid fa-list-ul"></i> Filtrer par catégorie</h4>
+    <div class="mb-3">
+        <a href="client.php" class="btn btn-outline-primary me-2 <?= $categorieId === 0 ? 'active' : '' ?>">Tous</a>
+        <?php foreach ($categories as $categorie): ?>
+            <a href="client.php?categorie_id=<?= $categorie['id_categorie'] ?>" class="btn btn-outline-primary me-2 <?= $categorieId === (int)$categorie['id_categorie'] ? 'active' : '' ?>">
+                <?= $categorie['nomcat'] ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
 
-        <!-- Catégories -->
-        <div style="flex: 0 0 25%; border-right: 1px solid #ddd; padding-right: 15px;">
-            <h5 style="text-align: center;"><i class="fa-solid fa-list-ul"></i> Catégories</h5>
-            <ul class="list-group list-group-flush" style="max-width: 300px; margin: 0 auto;">
-                <?php foreach ($categories as $categorie): ?>
-                    <li class="list-group-item p-1">
-                        <a class="btn btn-sm btn-light w-100 text-start" href="categorie.php?id=<?= $categorie['id_categorie']; ?>">
-                            <?= $categorie['nomcat'] ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+    <!-- Formulaire de tri -->
+    <form method="get" class="mb-4 d-flex align-items-center gap-3">
+        <input type="hidden" name="categorie_id" value="<?= $categorieId ?>">
+        <label class="fw-semibold">Trier par prix :</label>
+        <select name="order" class="form-select" style="width: 200px;" onchange="this.form.submit()">
+            <option value="">Sans tri</option>
+            <option value="ASC" <?= $order === 'ASC' ? 'selected' : '' ?>>Prix croissant</option>
+            <option value="DESC" <?= $order === 'DESC' ? 'selected' : '' ?>>Prix décroissant</option>
+        </select>
+    </form>
 
-        <!-- Produits -->
-        <div style="flex: 1; padding-left: 15px;">
-            <h5 style="text-align: center; margin-bottom: 20px;"><i class="fa-solid fa-box-open"></i> Produits disponibles</h5>
+    <h4><i class="fa-solid fa-box-open"></i> Liste des produits</h4>
 
-            <!-- Tri -->
-            <form method="get" style="text-align: center; margin-bottom: 20px;">
-                <label for="order" class="me-2 fw-semibold">Trier par prix :</label>
-                <select name="order" id="order" onchange="this.form.submit()" class="form-select d-inline-block" style="width: 200px;">
-                    <option value="" <?= $order === '' ? 'selected' : '' ?>>Sans tri</option>
-                    <option value="ASC" <?= $order === 'ASC' ? 'selected' : '' ?>>Prix croissant</option>
-                    <option value="DESC" <?= $order === 'DESC' ? 'selected' : '' ?>>Prix décroissant</option>
-                </select>
-                <noscript><button type="submit" class="btn btn-primary ms-2">Trier</button></noscript>
-            </form>
+    <div class="row">
+        <?php if (count($produits) === 0): ?>
+            <p>Aucun produit trouvé.</p>
+        <?php else: ?>
+            <?php foreach ($produits as $produit): ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 position-relative">
+                        <?php if (!empty($produit['promo'])): ?>
+                            <span class="badge rounded-pill text-bg-warning w-25 position-absolute m-2" style="right:0">
+                                - <?= $produit['promo'] ?>%
+                            </span>
+                        <?php endif; ?>
 
-            <div class="row row-cols-2 gx-4 gy-4" style="margin: 0 15px;">
-                <?php foreach ($produits as $produit): ?>
-                    <div class="col">
-                        <div class="card h-100 position-relative">
+                        <?php if (!empty($produit['image'])): ?>
+                            <img src="../upload/produit/<?= $produit['image'] ?>" alt="<?= $produit['nomp'] ?>" class="card-img-top w-75 mx-auto" style="height: 300px; object-fit: cover;" />
+                        <?php endif; ?>
+
+                        <div class="card-body">
+                            <a href="produit.php?id=<?= $produit['id_produit'] ?>" class="btn stretched-link"></a>
+                            <h5 class="card-title"><?= $produit['nomp'] ?></h5>
+                            <p class="card-text"><?= $produit['description'] ?></p>
+                            <p class="card-text">
+                                <small class="text-muted">Ajouté le : <?= date_format(date_create($produit['date_creationp']), 'Y/m/d') ?></small>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white text-center" style="z-index: 10;">
                             <?php if (!empty($produit['promo'])): ?>
-                                <span class="badge rounded-pill text-bg-warning position-absolute m-2" style="right: 0;">
-                                    -<?= (int)$produit['promo'] ?>%
-                                </span>
+                                <div class="h5">
+                                    <span class="badge rounded-pill text-bg-danger">
+                                        <strike><?= $produit['prix'] ?> MAD</strike>
+                                    </span>
+                                </div>
+                                <div class="h5">
+                                    <span class="badge rounded-pill text-bg-success">
+                                        <?= calculerRemise($produit['prix'], $produit['promo']) ?> MAD
+                                    </span>
+                                </div>
+                            <?php else: ?>
+                                <div class="h5">
+                                    <span class="badge rounded-pill text-bg-success">
+                                        <?= $produit['prix'] ?> MAD
+                                    </span>
+                                </div>
                             <?php endif; ?>
 
-                            <img src="../upload/produit/<?= $produit['image'] ?>" alt="<?= $produit['nomp'] ?>" 
-                                 class="card-img-top" style="height: 220px; object-fit: cover;">
-
-                            <div class="card-body">
-                                <h5 class="card-title"><?= $produit['nomp'] ?></h5>
-                                <p class="card-text"><?= $produit['description'] ?></p>
-                            </div>
-
-                            <div class="card-footer text-center bg-white">
-                                <?php if (!empty($produit['promo'])): ?>
-                                    <div class="text-muted text-decoration-line-through"><?= $produit['prix'] ?> MAD</div>
-                                    <div class="text-danger fw-bold"><?= calculerRemise($produit['prix'], $produit['promo']) ?> MAD</div>
-                                <?php else: ?>
-                                    <div class="text-success fw-bold"><?= $produit['prix'] ?> MAD</div>
-                                <?php endif; ?>
-
-                                <div class="d-flex justify-content-center gap-2 mt-2">
-                                    <a href="produit.php?id=<?= (int)$produit['id_produit'] ?>" class="btn btn-outline-secondary">
-                                        Voir le produit
-                                    </a>
-                                    <form method="post" action="ajouter_panier.php">
-                                        <input type="hidden" name="id" value="<?= (int)$produit['id_produit'] ?>">
-                                        <input type="hidden" name="qty" value="1">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa fa-cart-plus"></i> Ajouter
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
+                            <form method="post" action="ajouter_panier.php" onsubmit="return checkLogin(event)">
+                                <input type="hidden" name="id" value="<?= $produit['id_produit'] ?>" />
+                                <input type="number" name="qty" value="1" min="1" max="99" class="form-control mb-2 mx-auto" style="width: 100px;" />
+                                <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                            </form>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const utilisateurConnecte = <?= isset($_SESSION['utilisateur']) ? 'true' : 'false' ?>;
+    function checkLogin(event) {
+        if (!utilisateurConnecte) {
+            event.preventDefault();
+            alert('Vous devez être connecté pour ajouter un produit au panier.');
+            window.location.href = '../connexion.php';
+            return false;
+        }
+        return true;
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
