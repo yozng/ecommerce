@@ -39,7 +39,7 @@ foreach ($panier as $idProduit => $quantite) {
 
 <div class="container mt-4">
     <h2>Choix du mode de paiement</h2>
-    <form action="confirmer_commande.php" method="post">
+    <form action="confirmer_commande.php" method="post" class="mb-3">
         <input type="hidden" name="total" value="<?= $total ?>">
 
         <div class="mb-3">
@@ -52,6 +52,8 @@ foreach ($panier as $idProduit => $quantite) {
 
         <button type="submit" class="btn btn-primary">Confirmer la commande</button>
     </form>
+
+    <a href="client.php" class="btn btn-secondary">← Poursuivre les achats</a>
 </div>
 </body>
 </html>

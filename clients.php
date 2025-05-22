@@ -1,39 +1,42 @@
 <?php
-include 'include/database.php';
 include 'include/nav.php';
+require 'include/database.php';
 
-$req = $pdo->query("SELECT id_user, login, nom, prenom, date_creation FROM utilisateurs WHERE role = 'client'");
+if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'admin') {
+    header('Location: connexion.php');
+    exit;
+}
+
+$categories = $pdo->query("SELECT * FROM categorie")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-4">
-  <h2>Liste des clients</h2>
+  <h2>Liste des catégories</h2>
+  <a href="ajouter_categorie.php" class="btn btn-success mb-3">Ajouter une catégorie</a>
   <table class="table table-striped table-bordered">
-    <thead class="table-dark">
+    <thead class="table-dark"> <!-- En-tête en noir -->
       <tr>
         <th>ID</th>
-        <th>Login</th>
         <th>Nom</th>
-        <th>Prénom</th>
-        <th>Date d'inscription</th>
+        <th>Description</th>
+        <th>Date de création</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <?php while ($client = $req->fetch(PDO::FETCH_ASSOC)) { ?>
+      <?php foreach ($categories as $categorie) { ?>
         <tr>
-          <td><?= htmlspecialchars($client['id_user']) ?></td>
-          <td><?= htmlspecialchars($client['login']) ?></td>
-          <td><?= htmlspecialchars($client['nom']) ?></td>
-          <td><?= htmlspecialchars($client['prenom']) ?></td>
-          <td><?= htmlspecialchars($client['date_creation']) ?></td>
+          <td><?= $categorie['id_categorie'] ?></td>
+          <td><?= $categorie['nomcat'] ?></td>
+          <td><?= $categorie['descriptioncat'] ?></td>
+          <td><?= $categorie['date_creationcat'] ?></td>
           <td>
-            <a href="modifier_client.php?id=<?= $client['id_user'] ?>" class="btn btn-sm btn-warning">Modifier</a>
-            <a href="supprimer_client.php?id=<?= $client['id_user'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?');">Supprimer</a>
+            <a href="modifier_categorie.php?id=<?= $categorie['id_categorie'] ?>" class="btn btn-warning btn-sm">Modifier</a>
+            <a href="supprimer_categorie.php?id=<?= $categorie['id_categorie'] ?>" class="btn btn-danger btn-sm" 
+               onclick="return confirm('Voulez-vous vraiment supprimer la catégorie <?= $categorie['nomcat'] ?> ?');">Supprimer</a>
           </td>
         </tr>
       <?php } ?>
     </tbody>
   </table>
 </div>
-
-<?php include 'include/footer.php'; ?>
