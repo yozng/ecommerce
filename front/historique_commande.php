@@ -2,40 +2,59 @@
 session_start();
 require '../include/database.php';
 
-$idUtilisateur = $_SESSION['utilisateur']['id_user'] ?? 0;
+if (!isset($_SESSION['utilisateur']) || $_SESSION['utilisateur']['role'] !== 'client') {
+    header('Location: login.php');
+    exit;
+}
 
-$stmt = $pdo->prepare("SELECT * FROM commandes WHERE id_clt = ?");
-$stmt->execute([$idUtilisateur]);
-$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$idUtilisateur = $_SESSION['utilisateur']['id_user'];
+
+$commandes = $pdo->prepare("SELECT * FROM commandes WHERE id_clt = ? ORDER BY date_creationc DESC");
+$commandes->execute([$idUtilisateur]);
+$liste = $commandes->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Historique des Commandes</title>
+    <title>Mes Commandes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Historique de vos Commandes</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID Commande</th>
-                <th>Total</th>
-                <th>Date de Création</th>
-                <th>État</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($commandes as $commande): ?>
+<?php include '../include/nav_front.php'; ?>
+
+<div class="container mt-4">
+    <h2>Historique de mes commandes</h2>
+
+    <?php if (empty($liste)): ?>
+        <div class="alert alert-info">Vous n'avez passé aucune commande.</div>
+    <?php else: ?>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td><?php echo $commande['id']; ?></td>
-                    <td><?php echo $commande['total']; ?> MAD</td>
-                    <td><?php echo $commande['date_creationc']; ?></td>
-                    <td><?php echo $commande['valide'] ? 'Validée' : 'Non validée'; ?></td>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Mode de paiement</th>
+                    <th>Statut</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($liste as $commande): ?>
+                    <tr>
+                        <td><?= $commande['id_cmd'] ?></td>
+                        <td><?= $commande['date_creationc'] ?></td>
+                        <td><?= $commande['total'] ?> MAD</td>
+                        <td><?= ucfirst($commande['mode_paiement']) ?></td>
+                        <td>
+                            <?= ($commande['statut'] == 0) ? "En attente" : "Validée" ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
 </body>
 </html>
