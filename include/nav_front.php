@@ -40,7 +40,7 @@ if ($connecte) {
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item"><a class="nav-link" href="client.php">Liste des catégories</a></li>
+        <li class="nav-item"><a class="nav-link" href="client.php">Produits</a></li>
         <li class="nav-item"><a class="nav-link" href="panier.php">🛒 Panier (<?= $productCount ?>)</a></li>
 
         <?php if ($connecte): ?>
@@ -62,10 +62,6 @@ if ($connecte) {
   </div>
 </nav>
 
-<div class="container mt-4">
-  <h1 class="text-center">Bienvenue sur JeuxDeSociété.ma</h1>
-  <p class="text-center">Votre boutique en ligne de jeux de société !</p>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
