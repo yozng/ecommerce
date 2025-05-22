@@ -27,7 +27,7 @@
 <body>
     <?php include '../include/nav_front.php' ?>
     <div class="container mt-3">
-        <a href="client.php" class="btn btn-outline-primary">← Retour à la liste des catégories</a>
+        <a href="client.php" class="btn btn-outline-primary">← Retour à la liste des produits</a>
     </div>
 
     <div class="container py-2">

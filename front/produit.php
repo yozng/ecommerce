@@ -5,6 +5,9 @@ $stmt = $pdo->prepare("SELECT * FROM produits WHERE id_produit = :id");
 $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
 $stmt->execute();
 $produits = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Récupération de l'ID de catégorie pour le lien retour
+$idCategorie = $produits['id_categorie'];
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +21,10 @@ $produits = $stmt->fetch(PDO::FETCH_ASSOC);
 <body>
 <?php include '../include/nav_front.php'; ?>
 
-<div class="container my-5">
+<div class="container my-4">
+    <!-- Bouton retour -->
+    <a href="client.php" class="btn btn-outline-primary mb-3">← Retour à la liste des produits</a>
+
     <div class="row align-items-center">
 
         <div class="col-md-6 text-center">
