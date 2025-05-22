@@ -13,13 +13,26 @@ if (isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC'
     $order = strtoupper($_GET['order']);
 }
 
+// Récupération du terme de recherche
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
 // Construction de la requête SQL
 $query = "SELECT * FROM produits";
 $params = [];
+$conditions = [];
 
 if ($categorieId > 0) {
-    $query .= " WHERE id_categorie = ?";
+    $conditions[] = "id_categorie = ?";
     $params[] = $categorieId;
+}
+
+if ($search !== '') {
+    $conditions[] = "nomp LIKE ?";
+    $params[] = "%$search%";
+}
+
+if (count($conditions) > 0) {
+    $query .= " WHERE " . implode(" AND ", $conditions);
 }
 
 if ($order !== '') {
@@ -48,9 +61,19 @@ function calculerRemise($prix, $promo) {
 <body>
 <?php include '../include/nav_front.php'; ?>
 
-<div style="text-align: center; margin-top: 40px; margin-bottom: 100px;">
+<div style="text-align: center; margin-top: 40px; margin-bottom: 10px;">
     <h1 style="font-size: 3.5rem; font-weight: 500;">Bienvenue sur JeuxDeSociété.ma</h1>
     <p style="font-size: 1.5rem; margin-top: 15px;">Votre boutique en ligne de jeux de société !</p>
+</div>
+
+<!-- Barre de recherche -->
+<div class="container mb-4">
+    <form method="get" class="d-flex justify-content-center" role="search">
+        <input type="hidden" name="categorie_id" value="<?= $categorieId ?>">
+        <input type="hidden" name="order" value="<?= htmlspecialchars($order) ?>">
+        <input type="search" name="search" value="<?= htmlspecialchars($search) ?>" class="form-control w-50 me-2" placeholder="Rechercher un produit par nom..." aria-label="Recherche" />
+        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Rechercher</button>
+    </form>
 </div>
 
 <div class="container py-4">
@@ -67,6 +90,7 @@ function calculerRemise($prix, $promo) {
     <!-- Formulaire de tri -->
     <form method="get" class="mb-4 d-flex align-items-center gap-3">
         <input type="hidden" name="categorie_id" value="<?= $categorieId ?>">
+        <input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
         <label class="fw-semibold">Trier par prix :</label>
         <select name="order" class="form-select" style="width: 200px;" onchange="this.form.submit()">
             <option value="">Sans tri</option>
