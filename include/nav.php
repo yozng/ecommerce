@@ -1,5 +1,8 @@
 <?php
-session_start();
+//session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $connecte = isset($_SESSION['utilisateur']);
 $role = $connecte ? $_SESSION['utilisateur']['role'] : null;
 $accueil = $connecte ? ($role === 'admin' ? 'admin.php' : 'front/client.php') : 'index.php';

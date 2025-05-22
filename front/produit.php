@@ -5,7 +5,6 @@ $stmt = $pdo->prepare("SELECT * FROM produits WHERE id_produit = :id");
 $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
 $stmt->execute();
 $produits = $stmt->fetch(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -21,10 +20,11 @@ $produits = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <div class="container my-5">
     <div class="row align-items-center">
+
         <div class="col-md-6 text-center">
             <img src="../upload/produit/<?php echo $produits['image']; ?>" 
                  class="img-fluid rounded shadow-sm border" 
-                 alt="<?php echo $produits['nomp']; ?>" style="max-height: 400px;">
+                 alt="<?php echo $produits['nomp']; ?>" style="max-height: 400px;">
         </div>
 
         <div class="col-md-6">
