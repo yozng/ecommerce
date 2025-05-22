@@ -23,3 +23,5 @@ $stmt->execute([$id]);
 
 header("Location: clients.php");
 exit;
+
+?>
