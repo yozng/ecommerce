@@ -26,10 +26,11 @@ $idCategorie = $produits['id_categorie'];
     <a href="client.php" class="btn btn-outline-primary mb-3">← Retour à la liste des produits</a>
 
     <div class="row align-items-center">
+
         <div class="col-md-6 text-center">
             <img src="../upload/produit/<?php echo $produits['image']; ?>" 
                  class="img-fluid rounded shadow-sm border" 
-                 alt="<?php echo $produits['nomp']; ?>" style="max-height: 400px;">
+                 alt="<?php echo $produits['nomp']; ?>" style="max-height: 400px;">
         </div>
 
         <div class="col-md-6">
