@@ -18,14 +18,24 @@ $categories = $pdo->query("SELECT * FROM categorie")->fetchAll(PDO::FETCH_ASSOC)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" 
           integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
     <title>Liste des catégories</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000;
+        }
+        td {
+            background-color: #f0f0f0 !important;
+            color: #000;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-4">
         <h2>Liste des catégories</h2>
         <a href="ajouter_categorie.php" class="btn btn-success mb-3">Ajouter une catégorie</a>
 
-        <table class="table table-striped table-hover align-middle">
-            <thead>
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-dark text-center">
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Nom</th>
@@ -51,6 +61,5 @@ $categories = $pdo->query("SELECT * FROM categorie")->fetchAll(PDO::FETCH_ASSOC)
             </tbody>
         </table>
     </div>
-
 </body>
 </html>
