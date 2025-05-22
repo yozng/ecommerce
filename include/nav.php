@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $connecte = isset($_SESSION['utilisateur']);
 $role = $connecte ? $_SESSION['utilisateur']['role'] : null;
-$accueil = $connecte ? ($role === 'admin' ? 'admin.php' : 'front/client.php') : 'index.php';
+$accueil = $connecte ? ($role === 'admin' ? 'admin.php' : 'front/client.php') : 'front/client.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
